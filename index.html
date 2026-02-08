@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Just One Thing 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f172a, #020617);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: #e5e7eb;
+  }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .screen.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 32px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  h1 {
+    margin-top: 0;
+    font-size: 28px;
+  }
+
+  .sub {
+    color: #cbd5f5;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  button {
+    border: none;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .primary {
+    background: linear-gradient(135deg, #22c55e, #86efac);
+    color: #020617;
+    box-shadow: 0 12px 24px rgba(34,197,94,0.35);
+  }
+
+  .secondary {
+    background: linear-gradient(135deg, #ef4444, #fca5a5);
+    color: #020617;
+    box-shadow: 0 12px 24px rgba(239,68,68,0.35);
+    position: relative;
+  }
+
+  .buttons {
+    position: relative;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .final-no {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #cbd5f5;
+    text-decoration: underline;
+    cursor: pointer;
+    opacity: 0.8;
+  }
+  .final-no:hover { opacity: 1; }
+
+  .message-box {
+    background: rgba(2,6,23,0.7);
+    border-radius: 16px;
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,0.1);
+    text-align: left;
+    min-height: 120px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+  }
+
+  /* Hearts */
+  .heart {
+    position: fixed;
+    top: -20px;
+    color: #fb7185;
+    font-size: 20px;
+    animation: fall linear forwards;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Screen 1: Intro -->
+<div class="screen active" id="screen1">
+  <div class="card">
+    <h1>Hey… arzoooo</h1>
+    <div class="sub">
+          </div>
+    <button class="primary" id="startBtn">Continue</button>
+  </div>
+</div>
+
+<!-- Screen 2: Question -->
+<div class="screen" id="screen2">
+  <div class="card">
+    <h1>Kuch batt karni h </h1>
+   
+
+    <div class="buttons" id="buttonArea">
+      <button class="primary" id="yesBtn">Yes</button>
+      <button class="secondary" id="noBtn">No</button>
+    </div>
+
+    <div class="final-no" id="finalNoLink">.</div>
+  </div>
+</div>
+
+<!-- Screen 3: Yes Message -->
+<div class="screen" id="screenYes">
+  <div class="card">
+    <h1>Made me happy 💖</h1>
+    <div class="message-box" id="typeBox"></div>
+  </div>
+</div>
+
+<!-- Screen 4: No Message -->
+<div class="screen" id="screenNo">
+  <div class="card">
+    <h1></h1>
+    <div class="sub">
+    .
+    </div>
+  </div>
+</div>
+
+<script>
+  const screen1 = document.getElementById("screen1");
+  const screen2 = document.getElementById("screen2");
+  const screenYes = document.getElementById("screenYes");
+  const screenNo = document.getElementById("screenNo");
+
+  const startBtn = document.getElementById("startBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const finalNoLink = document.getElementById("finalNoLink");
+  const area = document.getElementById("buttonArea");
+
+  const typeBox = document.getElementById("typeBox");
+
+  function show(screen) {
+    [screen1, screen2, screenYes, screenNo].forEach(s => s.classList.remove("active"));
+    screen.classList.add("active");
+  }
+
+  startBtn.addEventListener("click", () => show(screen2));
+
+  // Hearts
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (16 + Math.random() * 20) + "px";
+    const duration = 4 + Math.random() * 4;
+    heart.style.animationDuration = duration + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), duration * 1000);
+  }
+  setInterval(createHeart, 300);
+
+  // No button playful loop
+  const noTexts = [
+    "Really? 😅",
+    "Nope 🙈",
+    "Are you sure? 🥺",
+    "Still no? 😶",
+    "Think again? 😳",
+    "Not even a talk? 💔",
+    "Hmm… 😅",
+    "Nooo? 🥲"
+  ];
+  let noIndex = 0;
+
+  noBtn.addEventListener("click", () => {
+    noBtn.textContent = noTexts[noIndex % noTexts.length];
+    noIndex++;
+
+    const areaRect = area.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const maxX = areaRect.width - btnRect.width;
+    const maxY = areaRect.height - btnRect.height;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  });
+
+  finalNoLink.addEventListener("click", () => {
+    show(screenNo);
+  });
+
+  // Yes button -> typewriter message
+  const messageText = 
+` I really care about you and about what we shared.
+I miss our bond, our talks, and the way we understood each other.
+
+I just wanted you to know that you matter to me,
+and that I’d love to try rebuilding what we had.
+
+Aur yaar, waise bhi…
+jahan bhi jaogi, mujhe paogi — permanent 😏🙂‍↔️
+
+Ik ik, mere kuch kaam gali khaane wale h,
+par gali se nahi, block se dar lagta h sab ♥️🙂
+
+Bas hope ye hai ki jo mera kaam tha — to make you smile — wo main kar paaya hoon.
+
+Aur at last…
+bura ho ya acha ,
+din ho ya raat,
+I’m always apke sath.`;
+
+  function typeWriter(text, element, speed = 30) {
+    element.textContent = "";
+    let i = 0;
+    const timer = setInterval(() => {
+      element.textContent += text.charAt(i);
+      i++;
+      if (i >= text.length) clearInterval(timer);
+    }, speed);
+  }
+
+  yesBtn.addEventListener("click", () => {
+    show(screenYes);
+    typeWriter(messageText, typeBox, 25);
+  });
+</script>
+
+</body>
+</html>
